@@ -1,0 +1,2499 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>George Mwaura Mungai — VCF Studio</title>
+    <meta name="author" content="George Mwaura Mungai" />
+    <meta
+      name="description"
+      content="Professional contact manager by George Mwaura Mungai"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0a0a0b;
+        --surface: #131315;
+        --surface2: #1a1a1d;
+        --surface3: #202024;
+        --border: #252528;
+        --border2: #303035;
+        --accent: #b8f050;
+        --accent-dim: rgba(184, 240, 80, 0.12);
+        --accent-border: rgba(184, 240, 80, 0.25);
+        --gold: #e8c870;
+        --gold-dim: rgba(232, 200, 112, 0.1);
+        --gold-border: rgba(232, 200, 112, 0.25);
+        --blue: #60b8f0;
+        --blue-dim: rgba(96, 184, 240, 0.1);
+        --blue-border: rgba(96, 184, 240, 0.25);
+        --wa: #25d366;
+        --wa-bg: rgba(37, 211, 102, 0.1);
+        --wa-border: rgba(37, 211, 102, 0.28);
+        --text: #edeae4;
+        --text2: #a8a5a0;
+        --text3: #5e5d62;
+        --danger: #f05050;
+        --danger-bg: rgba(240, 80, 80, 0.08);
+        --r: 10px;
+        --r-lg: 16px;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 15px;
+        min-height: 100vh;
+        line-height: 1.65;
+        overflow-x: hidden;
+      }
+
+      /* grid bg */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(184, 240, 80, 0.018) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(184, 240, 80, 0.018) 1px, transparent 1px);
+        background-size: 48px 48px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* ═══════════════════════════
+   PAGES
+═══════════════════════════ */
+      .page {
+        display: none;
+        position: relative;
+        z-index: 1;
+      }
+      .page.active {
+        display: block;
+      }
+      #page-land.active {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      #page-login.active {
+        display: flex;
+        min-height: 100vh;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      /* ═══════════════════════════
+   LANDING PAGE
+═══════════════════════════ */
+      .land-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px 40px;
+        border-bottom: 1px solid var(--border);
+      }
+      .land-logo {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 20px;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        color: var(--text);
+      }
+      .land-logo span {
+        color: var(--accent);
+      }
+      .land-nav-links {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .land-hero {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 80px 24px 60px;
+        position: relative;
+      }
+      .land-hero::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        height: 600px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(184, 240, 80, 0.055) 0%,
+          transparent 65%
+        );
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        color: var(--accent);
+        text-transform: uppercase;
+        background: var(--accent-dim);
+        border: 1px solid var(--accent-border);
+        padding: 6px 14px;
+        border-radius: 999px;
+        margin-bottom: 32px;
+      }
+      .hero-eyebrow::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent);
+        animation: pulse 2.2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.45;
+          transform: scale(0.75);
+        }
+      }
+
+      .hero-name {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(44px, 8vw, 88px);
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: -1.5px;
+        margin-bottom: 14px;
+      }
+      .hero-name em {
+        font-style: italic;
+        color: var(--accent);
+      }
+      .hero-sub {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(18px, 3vw, 26px);
+        font-weight: 400;
+        color: var(--text2);
+        font-style: italic;
+        margin-bottom: 12px;
+        letter-spacing: 0.01em;
+      }
+      .hero-desc {
+        font-size: 14px;
+        color: var(--text3);
+        max-width: 480px;
+        margin: 0 auto 44px;
+        line-height: 1.7;
+        font-family: "DM Mono", monospace;
+        letter-spacing: 0.01em;
+      }
+
+      .hero-cta {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .cta-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        background: var(--accent);
+        color: #080808;
+        font-family: "DM Sans", sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 13px 28px;
+        border-radius: var(--r);
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+      }
+      .cta-primary:hover {
+        background: #ccff55;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px rgba(184, 240, 80, 0.22);
+      }
+      .cta-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        background: transparent;
+        color: var(--text2);
+        font-family: "DM Sans", sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        padding: 13px 24px;
+        border-radius: var(--r);
+        border: 1px solid var(--border2);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .cta-secondary:hover {
+        border-color: var(--text3);
+        color: var(--text);
+        background: var(--surface2);
+      }
+
+      .land-features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1px;
+        background: var(--border);
+        border-top: 1px solid var(--border);
+      }
+      .feat {
+        background: var(--bg);
+        padding: 32px 28px;
+        transition: background 0.2s;
+      }
+      .feat:hover {
+        background: var(--surface);
+      }
+      .feat-icon {
+        font-size: 22px;
+        margin-bottom: 14px;
+      }
+      .feat-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 6px;
+      }
+      .feat-desc {
+        font-size: 12px;
+        color: var(--text3);
+        font-family: "DM Mono", monospace;
+        line-height: 1.65;
+      }
+
+      .land-footer {
+        padding: 20px 40px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .land-footer p {
+        font-size: 11px;
+        color: var(--text3);
+        font-family: "DM Mono", monospace;
+      }
+      .land-footer a {
+        color: var(--accent);
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .land-footer a:hover {
+        text-decoration: underline;
+      }
+
+      /* ═══════════════════════════
+   LOGIN PAGE
+═══════════════════════════ */
+      .login-wrap {
+        width: 100%;
+        max-width: 420px;
+        animation: fadeUp 0.35s ease;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .login-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--text3);
+        font-family: "DM Mono", monospace;
+        cursor: pointer;
+        margin-bottom: 28px;
+        transition: color 0.15s;
+      }
+      .login-back:hover {
+        color: var(--text2);
+      }
+      .login-card {
+        background: var(--surface);
+        border: 1px solid var(--border2);
+        border-radius: var(--r-lg);
+        padding: 40px 36px;
+      }
+      .login-header {
+        margin-bottom: 32px;
+      }
+      .login-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 30px;
+        font-weight: 500;
+        letter-spacing: -0.3px;
+        margin-bottom: 4px;
+      }
+      .login-title em {
+        font-style: italic;
+        color: var(--accent);
+      }
+      .login-hint-text {
+        font-size: 12px;
+        color: var(--text3);
+        font-family: "DM Mono", monospace;
+      }
+      .login-label {
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        color: var(--text3);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+        display: block;
+      }
+      .login-input {
+        width: 100%;
+        background: var(--surface2);
+        border: 1px solid var(--border2);
+        border-radius: 8px;
+        color: var(--text);
+        font-family: "DM Mono", monospace;
+        font-size: 16px;
+        padding: 12px 16px;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        letter-spacing: 0.14em;
+        margin-bottom: 20px;
+      }
+      .login-input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(184, 240, 80, 0.08);
+      }
+      .login-input::placeholder {
+        color: var(--text3);
+        letter-spacing: 0.04em;
+      }
+      .login-btn {
+        width: 100%;
+        background: var(--accent);
+        color: #080808;
+        border: none;
+        border-radius: 8px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 13px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .login-btn:hover {
+        background: #ccff55;
+        transform: translateY(-1px);
+      }
+      .login-error {
+        color: var(--danger);
+        font-size: 12px;
+        font-family: "DM Mono", monospace;
+        text-align: center;
+        margin-top: 12px;
+        min-height: 18px;
+      }
+      .login-default {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 11px;
+        color: var(--text3);
+        font-family: "DM Mono", monospace;
+      }
+
+      /* ═══════════════════════════
+   SHARED APP
+═══════════════════════════ */
+      .app {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 32px 20px 80px;
+      }
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 32px;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+      .topbar-brand {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .topbar-brand h1 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(22px, 4vw, 34px);
+        font-weight: 500;
+        line-height: 1;
+        letter-spacing: -0.3px;
+      }
+      .topbar-brand h1 em {
+        font-style: italic;
+        color: var(--accent);
+      }
+      .topbar-brand p {
+        font-size: 11px;
+        color: var(--text3);
+        font-family: "DM Mono", monospace;
+        letter-spacing: 0.03em;
+      }
+      .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      /* author ribbon */
+      .author-ribbon {
+        background: var(--surface);
+        border: 1px solid var(--border2);
+        border-radius: var(--r);
+        padding: 14px 20px;
+        margin-bottom: 28px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .author-monogram {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          rgba(184, 240, 80, 0.2),
+          rgba(232, 200, 112, 0.15)
+        );
+        border: 1px solid var(--accent-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Cormorant Garamond", serif;
+        font-size: 17px;
+        font-weight: 500;
+        color: var(--accent);
+        flex-shrink: 0;
+        font-style: italic;
+      }
+      .author-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .author-name {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 17px;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+      }
+      .author-role {
+        font-size: 11px;
+        color: var(--text3);
+        font-family: "DM Mono", monospace;
+        margin-top: 1px;
+      }
+      .author-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 10px;
+        font-family: "DM Mono", monospace;
+        color: var(--gold);
+        background: var(--gold-dim);
+        border: 1px solid var(--gold-border);
+        padding: 4px 10px;
+        border-radius: 999px;
+        flex-shrink: 0;
+      }
+
+      /* nav tabs */
+      .nav-tabs {
+        display: flex;
+        gap: 3px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 4px;
+        margin-bottom: 24px;
+      }
+      .nav-tab {
+        flex: 1;
+        padding: 9px 12px;
+        border-radius: 7px;
+        font-size: 13px;
+        font-weight: 400;
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        color: var(--text3);
+        transition: all 0.18s;
+        text-align: center;
+        white-space: nowrap;
+      }
+      .nav-tab.active {
+        background: var(--surface2);
+        color: var(--text);
+        border: 1px solid var(--border2);
+      }
+      .nav-tab:hover:not(.active) {
+        color: var(--text2);
+      }
+
+      /* stats */
+      .admin-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 10px;
+        margin-bottom: 24px;
+      }
+      .stat-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 16px 18px;
+      }
+      .stat-label {
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        color: var(--text3);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+      }
+      .stat-value {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 30px;
+        font-weight: 500;
+        line-height: 1;
+        color: var(--accent);
+      }
+      .stat-card.s-wa .stat-value {
+        color: var(--wa);
+      }
+      .stat-card.s-total .stat-value {
+        color: var(--blue);
+      }
+      .stat-card.s-gold .stat-value {
+        color: var(--gold);
+      }
+
+      /* filter */
+      .filter-bar {
+        display: flex;
+        gap: 7px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+      }
+      .filter-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 13px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-family: "DM Mono", monospace;
+        cursor: pointer;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--text3);
+        transition: all 0.15s;
+        letter-spacing: 0.02em;
+      }
+      .filter-btn:hover {
+        color: var(--text2);
+        border-color: var(--border2);
+      }
+      .filter-btn.active {
+        background: var(--surface2);
+        color: var(--text);
+        border-color: var(--border2);
+      }
+      .filter-btn.f-wa.active {
+        background: var(--wa-bg);
+        color: var(--wa);
+        border-color: var(--wa-border);
+      }
+      .wa-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--wa);
+        flex-shrink: 0;
+      }
+
+      /* section box */
+      .section-box {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        padding: 28px;
+        margin-bottom: 22px;
+        position: relative;
+        overflow: hidden;
+      }
+      .section-box::after {
+        content: "";
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(184, 240, 80, 0.04) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .section-tag {
+        position: absolute;
+        top: 16px;
+        right: 18px;
+        font-family: "DM Mono", monospace;
+        font-size: 9px;
+        color: var(--accent);
+        letter-spacing: 0.16em;
+        opacity: 0.55;
+        text-transform: uppercase;
+      }
+      .section-title {
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        color: var(--text3);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+      }
+
+      /* form */
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .form-grid .full {
+        grid-column: 1/-1;
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .field label {
+        font-size: 10px;
+        color: var(--text3);
+        font-family: "DM Mono", monospace;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .field input,
+      .field select,
+      .field textarea {
+        background: var(--surface2);
+        border: 1px solid var(--border2);
+        border-radius: 8px;
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 14px;
+        padding: 10px 14px;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        width: 100%;
+      }
+      .field input::placeholder,
+      .field textarea::placeholder {
+        color: var(--text3);
+      }
+      .field input:focus,
+      .field select:focus,
+      .field textarea:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(184, 240, 80, 0.07);
+      }
+      .field select option {
+        background: var(--surface2);
+      }
+      .field textarea {
+        resize: vertical;
+        min-height: 68px;
+      }
+
+      /* wa toggle */
+      .wa-toggle-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 14px;
+        background: var(--surface2);
+        border: 1px solid var(--border2);
+        border-radius: 8px;
+        cursor: pointer;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+        user-select: none;
+      }
+      .wa-toggle-row:hover {
+        border-color: var(--wa-border);
+      }
+      .wa-toggle-row.on {
+        border-color: var(--wa-border);
+        background: var(--wa-bg);
+      }
+      .wa-icon {
+        font-size: 17px;
+      }
+      .wa-label {
+        font-size: 13px;
+        flex: 1;
+      }
+      .wa-label small {
+        display: block;
+        font-size: 10px;
+        color: var(--text3);
+        font-family: "DM Mono", monospace;
+      }
+      .toggle-sw {
+        width: 32px;
+        height: 17px;
+        background: var(--border2);
+        border-radius: 999px;
+        position: relative;
+        transition: background 0.2s;
+        flex-shrink: 0;
+      }
+      .toggle-sw.on {
+        background: var(--wa);
+      }
+      .toggle-sw::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: #fff;
+        transition: transform 0.2s;
+      }
+      .toggle-sw.on::after {
+        transform: translateX(15px);
+      }
+
+      /* buttons */
+      .actions {
+        display: flex;
+        gap: 9px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 18px;
+        border-radius: 8px;
+        font-family: "DM Sans", sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: #080808;
+      }
+      .btn-primary:hover {
+        background: #ccff55;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 18px rgba(184, 240, 80, 0.2);
+      }
+      .btn-secondary {
+        background: transparent;
+        border: 1px solid var(--border2);
+        color: var(--text2);
+      }
+      .btn-secondary:hover {
+        border-color: var(--text3);
+        background: var(--surface2);
+        color: var(--text);
+      }
+      .btn-wa {
+        background: var(--wa-bg);
+        border: 1px solid var(--wa-border);
+        color: var(--wa);
+      }
+      .btn-wa:hover {
+        background: rgba(37, 211, 102, 0.2);
+        transform: translateY(-1px);
+      }
+      .btn-blue {
+        background: var(--blue-dim);
+        border: 1px solid var(--blue-border);
+        color: var(--blue);
+      }
+      .btn-blue:hover {
+        background: rgba(96, 184, 240, 0.2);
+        transform: translateY(-1px);
+      }
+      .btn-gold {
+        background: var(--gold-dim);
+        border: 1px solid var(--gold-border);
+        color: var(--gold);
+      }
+      .btn-gold:hover {
+        background: rgba(232, 200, 112, 0.2);
+        transform: translateY(-1px);
+      }
+      .btn-danger {
+        background: var(--danger-bg);
+        border: 1px solid rgba(240, 80, 80, 0.22);
+        color: var(--danger);
+      }
+      .btn-danger:hover {
+        background: rgba(240, 80, 80, 0.15);
+      }
+
+      .badge-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: var(--accent-dim);
+        border: 1px solid var(--accent-border);
+        color: var(--accent);
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        padding: 4px 12px;
+        border-radius: 999px;
+      }
+
+      /* contacts */
+      .contacts-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .contacts-header h2 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 22px;
+        font-weight: 500;
+        letter-spacing: -0.2px;
+      }
+      .count-pill {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        color: var(--text3);
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 999px;
+      }
+      .search-bar {
+        position: relative;
+        margin-bottom: 11px;
+      }
+      .search-bar input {
+        width: 100%;
+        background: var(--surface);
+        border: 1px solid var(--border2);
+        border-radius: 8px;
+        color: var(--text);
+        font-size: 14px;
+        padding: 10px 14px 10px 36px;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .search-bar input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(184, 240, 80, 0.07);
+      }
+      .search-bar input::placeholder {
+        color: var(--text3);
+      }
+      .search-icon {
+        position: absolute;
+        left: 11px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text3);
+        font-size: 14px;
+        pointer-events: none;
+      }
+      .contact-list {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .contact-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        transition:
+          border-color 0.2s,
+          transform 0.15s;
+        animation: slideIn 0.2s ease;
+      }
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .contact-card:hover {
+        border-color: var(--border2);
+        transform: translateX(2px);
+      }
+      .contact-card.wa-card {
+        border-color: rgba(37, 211, 102, 0.15);
+      }
+      .contact-card.wa-card:hover {
+        border-color: rgba(37, 211, 102, 0.35);
+      }
+      .avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Cormorant Garamond", serif;
+        font-size: 16px;
+        flex-shrink: 0;
+        font-style: italic;
+      }
+      .av-0 {
+        background: rgba(184, 240, 80, 0.14);
+        color: var(--accent);
+      }
+      .av-1 {
+        background: rgba(96, 184, 240, 0.14);
+        color: var(--blue);
+      }
+      .av-2 {
+        background: rgba(240, 96, 200, 0.14);
+        color: #f060c8;
+      }
+      .av-3 {
+        background: rgba(232, 200, 112, 0.14);
+        color: var(--gold);
+      }
+      .av-4 {
+        background: rgba(96, 240, 160, 0.14);
+        color: #60f0a0;
+      }
+      .av-wa {
+        background: rgba(37, 211, 102, 0.14);
+        color: var(--wa);
+      }
+      .contact-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .contact-name {
+        font-weight: 500;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .wa-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        font-size: 9px;
+        font-family: "DM Mono", monospace;
+        color: var(--wa);
+        background: var(--wa-bg);
+        border: 1px solid var(--wa-border);
+        border-radius: 999px;
+        padding: 1px 7px;
+        flex-shrink: 0;
+        letter-spacing: 0.02em;
+      }
+      .contact-detail {
+        font-size: 11px;
+        color: var(--text3);
+        font-family: "DM Mono", monospace;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .contact-actions {
+        display: flex;
+        gap: 5px;
+        flex-shrink: 0;
+      }
+      .icon-btn {
+        width: 29px;
+        height: 29px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--text3);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        transition: all 0.15s;
+      }
+      .icon-btn:hover {
+        background: var(--surface2);
+        color: var(--text);
+        border-color: var(--border2);
+      }
+      .icon-btn.iwa:hover {
+        color: var(--wa);
+        border-color: var(--wa-border);
+        background: var(--wa-bg);
+      }
+      .icon-btn.idel:hover {
+        color: var(--danger);
+        border-color: rgba(240, 80, 80, 0.35);
+        background: var(--danger-bg);
+      }
+      .empty-state {
+        text-align: center;
+        padding: 48px 20px;
+        color: var(--text3);
+      }
+      .empty-state .big-icon {
+        font-size: 40px;
+        margin-bottom: 12px;
+        opacity: 0.3;
+      }
+      .empty-state p {
+        font-size: 12px;
+        font-family: "DM Mono", monospace;
+      }
+
+      /* modals */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(6, 6, 7, 0.88);
+        backdrop-filter: blur(6px);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+      }
+      .modal-overlay.open {
+        opacity: 1;
+        pointer-events: all;
+      }
+      .modal {
+        background: var(--surface);
+        border: 1px solid var(--border2);
+        border-radius: var(--r-lg);
+        padding: 28px;
+        width: 100%;
+        max-width: 500px;
+        transform: translateY(10px);
+        transition: transform 0.2s;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      .modal-overlay.open .modal {
+        transform: translateY(0);
+      }
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .modal-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 22px;
+        font-weight: 500;
+        font-style: italic;
+      }
+      .close-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        border: 1px solid var(--border2);
+        background: transparent;
+        color: var(--text3);
+        cursor: pointer;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+      }
+      .close-btn:hover {
+        color: var(--text);
+        background: var(--surface2);
+      }
+      .export-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+        margin-top: 16px;
+      }
+      .export-card {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 15px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .export-card:hover {
+        border-color: var(--accent-border);
+        background: rgba(184, 240, 80, 0.03);
+      }
+      .export-card .ico {
+        font-size: 20px;
+        margin-bottom: 7px;
+      }
+      .export-card .etitle {
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 3px;
+      }
+      .export-card .edesc {
+        font-size: 10px;
+        color: var(--text3);
+        font-family: "DM Mono", monospace;
+      }
+
+      /* settings */
+      .pwd-section {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        padding: 28px;
+        margin-bottom: 18px;
+      }
+
+      /* toast */
+      #toast {
+        position: fixed;
+        bottom: 26px;
+        left: 50%;
+        transform: translateX(-50%) translateY(14px);
+        background: var(--surface2);
+        border: 1px solid var(--border2);
+        border-radius: 999px;
+        padding: 9px 22px;
+        font-size: 12px;
+        font-family: "DM Mono", monospace;
+        color: var(--text);
+        opacity: 0;
+        transition: all 0.3s;
+        z-index: 999;
+        white-space: nowrap;
+        pointer-events: none;
+      }
+      #toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      /* divider */
+      .divider {
+        height: 1px;
+        background: var(--border);
+        margin: 20px 0;
+      }
+
+      @media (max-width: 640px) {
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+        .export-options {
+          grid-template-columns: 1fr;
+        }
+        .admin-stats {
+          grid-template-columns: 1fr 1fr;
+        }
+        .nav-tab {
+          font-size: 11px;
+          padding: 8px 8px;
+        }
+        .land-nav {
+          padding: 16px 20px;
+        }
+        .land-footer {
+          padding: 16px 20px;
+        }
+        .hero-cta {
+          flex-direction: column;
+          align-items: center;
+        }
+        .land-features {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ═══════════════════════════════
+     LANDING PAGE
+═══════════════════════════════ -->
+    <div id="page-land" class="page active">
+      <nav class="land-nav">
+        <div class="land-logo">George <span>Mwaura</span></div>
+        <div class="land-nav-links">
+          <button
+            class="btn-secondary btn"
+            onclick="goPublic()"
+            style="padding: 7px 16px; font-size: 13px"
+          >
+            ➕ Add Contact
+          </button>
+          <button
+            class="btn-secondary btn"
+            onclick="showLogin()"
+            style="padding: 7px 16px; font-size: 13px"
+          >
+            🔐 Admin
+          </button>
+        </div>
+      </nav>
+
+      <section class="land-hero">
+        <div class="hero-eyebrow">Professional Contact Manager</div>
+
+        <h1 class="hero-name">George<br /><em>Mwaura Mungai</em></h1>
+        <p class="hero-sub">Developer &amp; Digital Professional</p>
+        <p class="hero-desc">
+          // built by George Mwaura Mungai &mdash; a seamless tool to share,
+          collect and manage professional contacts in VCF format
+        </p>
+
+        <div class="hero-cta">
+          <button class="cta-primary" onclick="goPublic()">
+            ➕ Add Your Contact
+          </button>
+          <button class="cta-secondary" onclick="showLogin()">
+            🔐 Admin Login
+          </button>
+        </div>
+      </section>
+
+      <div class="land-features">
+        <div class="feat">
+          <div class="feat-icon">📇</div>
+          <div class="feat-title">VCF Cards</div>
+          <div class="feat-desc">
+            Generate and download industry-standard .vcf contact files instantly
+          </div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon">💬</div>
+          <div class="feat-title">WhatsApp Ready</div>
+          <div class="feat-desc">
+            Tag contacts as WhatsApp users and export broadcast-ready lists
+          </div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon">🔐</div>
+          <div class="feat-title">Admin Protected</div>
+          <div class="feat-desc">
+            All saved contacts are secured behind a private admin panel
+          </div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon">📤</div>
+          <div class="feat-title">Export Anywhere</div>
+          <div class="feat-desc">
+            Export to .vcf, CSV, or copy — compatible with all phones and apps
+          </div>
+        </div>
+      </div>
+
+      <footer class="land-footer">
+        <p>
+          Crafted by <a onclick="void 0">George Mwaura Mungai</a> &mdash; All
+          rights reserved &copy; 2025
+        </p>
+        <p><a onclick="showLogin()">Admin Login →</a></p>
+      </footer>
+    </div>
+
+    <!-- ═══════════════════════════════
+     LOGIN PAGE
+═══════════════════════════════ -->
+    <div id="page-login" class="page">
+      <div class="login-wrap">
+        <div class="login-back" onclick="showPage('land')">← Back to home</div>
+        <div class="login-card">
+          <div class="login-header">
+            <div class="login-title">Admin <em>Access</em></div>
+            <div class="login-hint-text">George Mwaura Mungai — VCF Studio</div>
+          </div>
+          <label class="login-label">Password</label>
+          <input
+            class="login-input"
+            type="password"
+            id="login-pwd"
+            placeholder="Enter password"
+            onkeydown="if (event.key === 'Enter') doLogin();"
+          />
+          <button class="login-btn" onclick="doLogin()">
+            Enter Admin Panel →
+          </button>
+          <div class="login-error" id="login-error"></div>
+          <div class="login-default">
+            default:
+            <code
+              style="
+                background: var(--surface2);
+                padding: 2px 7px;
+                border-radius: 4px;
+              "
+              >admin123</code
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════
+     PUBLIC PAGE
+═══════════════════════════════ -->
+    <div id="page-public" class="page">
+      <div class="app">
+        <div class="topbar">
+          <div class="topbar-brand">
+            <h1>George <em>Mwaura</em></h1>
+            <p>// vcf contact studio</p>
+          </div>
+          <div class="topbar-right">
+            <span class="badge-pill" id="pub-count">0 contacts</span>
+            <button
+              class="btn btn-secondary"
+              onclick="showPage('land')"
+              style="font-size: 13px; padding: 8px 14px"
+            >
+              ⌂ Home
+            </button>
+            <button
+              class="btn btn-secondary"
+              onclick="showLogin()"
+              style="font-size: 13px; padding: 8px 14px"
+            >
+              🔐 Admin
+            </button>
+          </div>
+        </div>
+
+        <!-- Author ribbon -->
+        <div class="author-ribbon">
+          <div class="author-monogram">GM</div>
+          <div class="author-info">
+            <div class="author-name">George Mwaura Mungai</div>
+            <div class="author-role">
+              // developer &amp; digital professional &mdash; nairobi, kenya
+            </div>
+          </div>
+          <div class="author-badge">✦ Author</div>
+        </div>
+
+        <!-- Add Contact -->
+        <div class="section-box">
+          <div class="section-title">Add your contact</div>
+          <div class="form-grid">
+            <div class="field">
+              <label>First Name *</label
+              ><input type="text" id="c-first" placeholder="Jane" />
+            </div>
+            <div class="field">
+              <label>Last Name</label
+              ><input type="text" id="c-last" placeholder="Smith" />
+            </div>
+            <div class="field">
+              <label>Phone *</label
+              ><input type="tel" id="c-phone" placeholder="+254 700 123456" />
+            </div>
+            <div class="field">
+              <label>Email</label
+              ><input
+                type="email"
+                id="c-email"
+                placeholder="jane@example.com"
+              />
+            </div>
+            <div class="field">
+              <label>Organization</label
+              ><input type="text" id="c-org" placeholder="Company" />
+            </div>
+            <div class="field">
+              <label>Phone Type</label>
+              <select id="c-phonetype">
+                <option value="CELL">Mobile</option>
+                <option value="WORK">Work</option>
+                <option value="HOME">Home</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label>WhatsApp</label>
+              <div
+                class="wa-toggle-row"
+                id="wa-toggle-row"
+                onclick="toggleWA()"
+              >
+                <span class="wa-icon">💬</span>
+                <span class="wa-label"
+                  >Available on WhatsApp<small id="wa-toggle-label"
+                    >Tap to mark this number as WhatsApp</small
+                  ></span
+                >
+                <div class="toggle-sw" id="wa-switch"></div>
+              </div>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" onclick="addContact()">
+              ➕ Save Contact
+            </button>
+            <button class="btn btn-secondary" onclick="clearAddForm()">
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <p
+          style="
+            text-align: center;
+            color: var(--text3);
+            font-size: 11px;
+            font-family: &quot;DM Mono&quot;, monospace;
+            padding: 10px 0;
+          "
+        >
+          Your contact is saved privately — visible to George Mwaura Mungai
+          only.
+        </p>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════
+     ADMIN PAGE
+═══════════════════════════════ -->
+    <div id="page-admin" class="page">
+      <div class="app">
+        <div class="topbar">
+          <div class="topbar-brand">
+            <h1>Admin <em>Panel</em></h1>
+            <p>// george mwaura mungai — vcf studio</p>
+          </div>
+          <div class="topbar-right">
+            <button
+              class="btn btn-secondary"
+              onclick="showPage('land')"
+              style="font-size: 13px; padding: 8px 14px"
+            >
+              ⌂ Home
+            </button>
+            <button
+              class="btn btn-secondary"
+              onclick="goPublic()"
+              style="font-size: 13px; padding: 8px 14px"
+            >
+              ← Public
+            </button>
+            <button
+              class="btn btn-danger"
+              onclick="doLogout()"
+              style="font-size: 13px; padding: 8px 14px"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+
+        <!-- Author ribbon -->
+        <div class="author-ribbon">
+          <div class="author-monogram">GM</div>
+          <div class="author-info">
+            <div class="author-name">George Mwaura Mungai</div>
+            <div class="author-role">
+              // admin dashboard &mdash; private &amp; restricted
+            </div>
+          </div>
+          <div class="author-badge">🔐 Admin</div>
+        </div>
+
+        <div class="nav-tabs">
+          <button
+            class="nav-tab active"
+            id="tab-contacts"
+            onclick="switchTab('contacts')"
+          >
+            📋 All Contacts
+          </button>
+          <button
+            class="nav-tab"
+            id="tab-whatsapp"
+            onclick="switchTab('whatsapp')"
+          >
+            💬 WhatsApp Only
+          </button>
+          <button
+            class="nav-tab"
+            id="tab-settings"
+            onclick="switchTab('settings')"
+          >
+            ⚙ Settings
+          </button>
+        </div>
+
+        <div class="admin-stats">
+          <div class="stat-card s-total">
+            <div class="stat-label">Total Contacts</div>
+            <div class="stat-value" id="stat-total">0</div>
+          </div>
+          <div class="stat-card s-wa">
+            <div class="stat-label">WhatsApp</div>
+            <div class="stat-value" id="stat-wa">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Non-WhatsApp</div>
+            <div class="stat-value" id="stat-nonwa">0</div>
+          </div>
+          <div class="stat-card s-gold">
+            <div class="stat-label">Added Today</div>
+            <div class="stat-value" id="stat-today">0</div>
+          </div>
+        </div>
+
+        <!-- ALL CONTACTS -->
+        <div id="panel-contacts">
+          <div class="contacts-header">
+            <div style="display: flex; align-items: center; gap: 10px">
+              <h2>Saved Contacts</h2>
+              <span class="count-pill" id="admin-count">0</span>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <button class="btn btn-blue" onclick="openExportModal()">
+                ⬇ Export
+              </button>
+              <button
+                class="btn btn-secondary"
+                onclick="importVCF()"
+                style="font-size: 13px"
+              >
+                ⬆ Import
+              </button>
+              <input
+                type="file"
+                id="vcf-file-input"
+                accept=".vcf"
+                style="display: none"
+                onchange="handleImport(event)"
+              />
+            </div>
+          </div>
+          <div class="search-bar">
+            <span class="search-icon">⌕</span>
+            <input
+              type="text"
+              id="admin-search"
+              placeholder="Search by name, phone, org..."
+              oninput="renderAdminContacts()"
+            />
+          </div>
+          <div class="filter-bar">
+            <button
+              class="filter-btn active"
+              id="f-all"
+              onclick="setFilter('all')"
+            >
+              All
+            </button>
+            <button class="filter-btn f-wa" id="f-wa" onclick="setFilter('wa')">
+              <span class="wa-dot"></span> WhatsApp
+            </button>
+            <button class="filter-btn" id="f-nowa" onclick="setFilter('nowa')">
+              Non-WhatsApp
+            </button>
+          </div>
+          <div class="contact-list" id="admin-contact-list"></div>
+        </div>
+
+        <!-- WHATSAPP ONLY -->
+        <div id="panel-whatsapp" style="display: none">
+          <div class="contacts-header">
+            <div style="display: flex; align-items: center; gap: 10px">
+              <h2 style="color: var(--wa)">💬 WhatsApp Contacts</h2>
+              <span class="count-pill" id="wa-count">0</span>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <button class="btn btn-wa" onclick="exportWAOnly()">
+                ⬇ Export WA VCF
+              </button>
+              <button
+                class="btn btn-secondary"
+                onclick="openWABroadcast()"
+                style="font-size: 13px"
+              >
+                📣 Broadcast
+              </button>
+            </div>
+          </div>
+          <div class="search-bar">
+            <span class="search-icon">⌕</span>
+            <input
+              type="text"
+              id="wa-search"
+              placeholder="Search WhatsApp contacts..."
+              oninput="renderWAContacts()"
+            />
+          </div>
+          <div class="contact-list" id="wa-contact-list"></div>
+        </div>
+
+        <!-- SETTINGS -->
+        <div id="panel-settings" style="display: none">
+          <div class="pwd-section">
+            <div class="section-title">Change Admin Password</div>
+            <p
+              style="
+                font-size: 12px;
+                color: var(--text3);
+                font-family: &quot;DM Mono&quot;, monospace;
+                margin-bottom: 20px;
+              "
+            >
+              Default:
+              <code
+                style="
+                  background: var(--surface2);
+                  padding: 2px 7px;
+                  border-radius: 4px;
+                "
+                >admin123</code
+              >
+            </p>
+            <div class="form-grid">
+              <div class="field full">
+                <label>Current Password</label
+                ><input
+                  type="password"
+                  id="pwd-current"
+                  placeholder="Current password"
+                />
+              </div>
+              <div class="field">
+                <label>New Password</label
+                ><input
+                  type="password"
+                  id="pwd-new"
+                  placeholder="Min 4 characters"
+                />
+              </div>
+              <div class="field">
+                <label>Confirm</label
+                ><input
+                  type="password"
+                  id="pwd-confirm"
+                  placeholder="Repeat new password"
+                />
+              </div>
+            </div>
+            <div class="actions">
+              <button class="btn btn-primary" onclick="changePassword()">
+                Update Password
+              </button>
+            </div>
+          </div>
+          <div class="pwd-section">
+            <div class="section-title">Data &amp; Backup</div>
+            <p
+              style="
+                font-size: 12px;
+                color: var(--text3);
+                font-family: &quot;DM Mono&quot;, monospace;
+                margin-bottom: 16px;
+              "
+            >
+              Manage or back up all contact data.
+            </p>
+            <div class="actions">
+              <button class="btn btn-gold" onclick="exportBackup()">
+                💾 Full Backup (JSON)
+              </button>
+              <button class="btn btn-danger" onclick="clearAllContacts()">
+                🗑 Delete All Contacts
+              </button>
+            </div>
+          </div>
+          <div class="pwd-section">
+            <div class="section-title">About</div>
+            <p
+              style="
+                font-size: 12px;
+                color: var(--text3);
+                font-family: &quot;DM Mono&quot;, monospace;
+                line-height: 1.8;
+              "
+            >
+              VCF Studio &mdash; built and maintained by
+              <strong style="color: var(--text2)">George Mwaura Mungai</strong
+              ><br />
+              Version 2.0 &mdash; All rights reserved &copy; 2025<br />
+              Nairobi, Kenya
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal-overlay" id="export-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Export contacts</div>
+          <button class="close-btn" onclick="closeModal('export-modal')">
+            ✕
+          </button>
+        </div>
+        <p
+          style="
+            color: var(--text3);
+            font-size: 12px;
+            font-family: &quot;DM Mono&quot;, monospace;
+          "
+        >
+          Choose export format:
+        </p>
+        <div class="export-options">
+          <div class="export-card" onclick="exportAll()">
+            <div class="ico">📦</div>
+            <div class="etitle">All Contacts</div>
+            <div class="edesc">Single .vcf file</div>
+          </div>
+          <div
+            class="export-card"
+            onclick="
+              exportWAOnly();
+              closeModal('export-modal');
+            "
+          >
+            <div class="ico">💬</div>
+            <div class="etitle">WhatsApp Only</div>
+            <div class="edesc">WA contacts .vcf</div>
+          </div>
+          <div class="export-card" onclick="exportCSV()">
+            <div class="ico">📊</div>
+            <div class="etitle">CSV Spreadsheet</div>
+            <div class="edesc">Excel / Sheets</div>
+          </div>
+          <div class="export-card" onclick="copyAllVCF()">
+            <div class="ico">⎘</div>
+            <div class="etitle">Copy VCF Text</div>
+            <div class="edesc">Paste anywhere</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="edit-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title">Edit contact</div>
+          <button class="close-btn" onclick="closeModal('edit-modal')">
+            ✕
+          </button>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label>First Name</label><input type="text" id="e-first" />
+          </div>
+          <div class="field">
+            <label>Last Name</label><input type="text" id="e-last" />
+          </div>
+          <div class="field">
+            <label>Phone</label><input type="tel" id="e-phone" />
+          </div>
+          <div class="field">
+            <label>Email</label><input type="email" id="e-email" />
+          </div>
+          <div class="field full">
+            <label>Organization</label><input type="text" id="e-org" />
+          </div>
+          <div class="field full">
+            <label>WhatsApp</label>
+            <div class="wa-toggle-row" id="e-wa-row" onclick="toggleEditWA()">
+              <span class="wa-icon">💬</span>
+              <span class="wa-label"
+                >WhatsApp contact<small id="e-wa-label"
+                  >Tap to toggle</small
+                ></span
+              >
+              <div class="toggle-sw" id="e-wa-switch"></div>
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="saveEdit()">
+            Save Changes
+          </button>
+          <button class="btn btn-secondary" onclick="closeModal('edit-modal')">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Broadcast Modal -->
+    <div class="modal-overlay" id="wa-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title" style="color: var(--wa)">
+            📣 Broadcast Numbers
+          </div>
+          <button class="close-btn" onclick="closeModal('wa-modal')">✕</button>
+        </div>
+        <p
+          style="
+            font-size: 12px;
+            color: var(--text3);
+            font-family: &quot;DM Mono&quot;, monospace;
+            margin-bottom: 12px;
+          "
+        >
+          All WhatsApp numbers — copy into a broadcast list:
+        </p>
+        <textarea
+          id="wa-broadcast-text"
+          style="
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: &quot;DM Mono&quot;, monospace;
+            font-size: 12px;
+            padding: 12px;
+            outline: none;
+            resize: vertical;
+            min-height: 130px;
+            line-height: 1.9;
+          "
+          readonly
+        ></textarea>
+        <div class="actions" style="margin-top: 12px">
+          <button class="btn btn-wa" onclick="copyBroadcast()">
+            ⎘ Copy Numbers
+          </button>
+          <button class="btn btn-secondary" onclick="closeModal('wa-modal')">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast"></div>
+
+    <script>
+      // ═══════════════ STATE ═══════════════
+      let contacts = JSON.parse(localStorage.getItem("vcf_contacts") || "[]");
+      let editingId = null,
+        waIsOn = false,
+        editWaIsOn = false,
+        activeFilter = "all";
+      const ADMIN_KEY = "vcf_admin_pwd",
+        SESSION_KEY = "vcf_session",
+        DEFAULT_PWD = "admin123";
+      const AV = ["av-0", "av-1", "av-2", "av-3", "av-4"];
+
+      function getPwd() {
+        return localStorage.getItem(ADMIN_KEY) || DEFAULT_PWD;
+      }
+
+      // ═══════════════ ROUTING ═══════════════
+      function showPage(id) {
+        document
+          .querySelectorAll(".page")
+          .forEach((p) => p.classList.remove("active"));
+        document.getElementById("page-" + id).classList.add("active");
+      }
+      function showLogin() {
+        showPage("login");
+        document.getElementById("login-pwd").value = "";
+        document.getElementById("login-error").textContent = "";
+        setTimeout(() => document.getElementById("login-pwd").focus(), 120);
+      }
+      function goPublic() {
+        showPage("public");
+        updatePublicCount();
+      }
+      function doLogin() {
+        const val = document.getElementById("login-pwd").value;
+        if (val === getPwd()) {
+          sessionStorage.setItem(SESSION_KEY, "1");
+          document.getElementById("login-error").textContent = "";
+          showPage("admin");
+          refreshAdmin();
+        } else {
+          document.getElementById("login-error").textContent =
+            "✕ Incorrect password";
+          document.getElementById("login-pwd").value = "";
+          document.getElementById("login-pwd").focus();
+        }
+      }
+      function doLogout() {
+        sessionStorage.removeItem(SESSION_KEY);
+        showPage("land");
+      }
+
+      // ═══════════════ TABS ═══════════════
+      function switchTab(tab) {
+        ["contacts", "whatsapp", "settings"].forEach((t) => {
+          document
+            .getElementById("tab-" + t)
+            .classList.toggle("active", t === tab);
+          document.getElementById("panel-" + t).style.display =
+            t === tab ? "block" : "none";
+        });
+        if (tab === "contacts") renderAdminContacts();
+        if (tab === "whatsapp") renderWAContacts();
+      }
+
+      // ═══════════════ DATA ═══════════════
+      function save() {
+        localStorage.setItem("vcf_contacts", JSON.stringify(contacts));
+        updateStats();
+        updatePublicCount();
+      }
+      function updateStats() {
+        const total = contacts.length,
+          wa = contacts.filter((c) => c.whatsapp).length;
+        const today = contacts.filter(
+          (c) =>
+            c.created &&
+            new Date(c.created).toDateString() === new Date().toDateString(),
+        ).length;
+        document.getElementById("stat-total").textContent = total;
+        document.getElementById("stat-wa").textContent = wa;
+        document.getElementById("stat-nonwa").textContent = total - wa;
+        document.getElementById("stat-today").textContent = today;
+        document.getElementById("admin-count").textContent = total;
+        document.getElementById("wa-count").textContent = wa;
+      }
+      function updatePublicCount() {
+        const n = contacts.length;
+        document.getElementById("pub-count").textContent =
+          n + (n === 1 ? " contact" : " contacts");
+      }
+      function refreshAdmin() {
+        updateStats();
+        renderAdminContacts();
+        renderWAContacts();
+      }
+
+      // ═══════════════ WA TOGGLE ═══════════════
+      function toggleWA() {
+        waIsOn = !waIsOn;
+        document.getElementById("wa-switch").classList.toggle("on", waIsOn);
+        document.getElementById("wa-toggle-row").classList.toggle("on", waIsOn);
+        document.getElementById("wa-toggle-label").textContent = waIsOn
+          ? "This number is on WhatsApp"
+          : "Tap to mark this number as WhatsApp";
+      }
+      function toggleEditWA() {
+        editWaIsOn = !editWaIsOn;
+        document
+          .getElementById("e-wa-switch")
+          .classList.toggle("on", editWaIsOn);
+        document.getElementById("e-wa-row").classList.toggle("on", editWaIsOn);
+        document.getElementById("e-wa-label").textContent = editWaIsOn
+          ? "On WhatsApp"
+          : "Tap to mark as WhatsApp";
+      }
+
+      // ═══════════════ VCF ═══════════════
+      function v(id) {
+        return document.getElementById(id).value.trim();
+      }
+      function initials(f, l) {
+        return ((f || "?")[0] + ((l ? l[0] : "") || "")).toUpperCase();
+      }
+      function makeVCF(c) {
+        const l = ["BEGIN:VCARD", "VERSION:3.0"];
+        if (c.first || c.last)
+          l.push("FN:" + ((c.first || "") + " " + (c.last || "")).trim());
+        if (c.first || c.last)
+          l.push("N:" + (c.last || "") + ";" + (c.first || "") + ";;;");
+        if (c.phone)
+          l.push("TEL;TYPE=" + (c.phonetype || "CELL") + ":" + c.phone);
+        if (c.email) l.push("EMAIL:" + c.email);
+        if (c.org) l.push("ORG:" + c.org);
+        if (c.title) l.push("TITLE:" + c.title);
+        if (c.url) l.push("URL:" + c.url);
+        if (c.address) l.push("ADR:;;" + c.address + ";;;;");
+        if (c.note) l.push("NOTE:" + c.note);
+        l.push("END:VCARD");
+        return l.join("\r\n");
+      }
+      function makeMyCard() {
+        return makeVCF({
+          first: v("my-first"),
+          last: v("my-last"),
+          phone: v("my-phone"),
+          email: v("my-email"),
+          org: v("my-org"),
+          title: v("my-title"),
+          url: v("my-url"),
+          address: v("my-address"),
+          note: v("my-note"),
+          phonetype: "CELL",
+        });
+      }
+      function dlVCF(content, filename) {
+        const blob = new Blob([content], { type: "text/vcard;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      // ═══════════════ MY CARD ═══════════════
+      function downloadMyCard() {
+        dlVCF(
+          makeMyCard(),
+          (v("my-first") || "my") + "_" + (v("my-last") || "card") + ".vcf",
+        );
+        toast("✓ Your VCF downloaded");
+      }
+      function shareMyCard() {
+        navigator.clipboard
+          .writeText(makeMyCard())
+          .then(() => toast("✓ vCard copied to clipboard"));
+      }
+
+      // ═══════════════ ADD CONTACT ═══════════════
+      function addContact() {
+        const first = v("c-first"),
+          phone = v("c-phone");
+        if (!first) {
+          toast("⚠ First name is required");
+          return;
+        }
+        if (!phone) {
+          toast("⚠ Phone number is required");
+          return;
+        }
+        contacts.unshift({
+          id: Date.now(),
+          first,
+          last: v("c-last"),
+          phone,
+          email: v("c-email"),
+          org: v("c-org"),
+          phonetype: document.getElementById("c-phonetype").value,
+          whatsapp: waIsOn,
+          created: new Date().toISOString(),
+        });
+        save();
+        clearAddForm();
+        toast("✓ Contact saved");
+      }
+      function clearAddForm() {
+        ["c-first", "c-last", "c-phone", "c-email", "c-org"].forEach(
+          (id) => (document.getElementById(id).value = ""),
+        );
+        document.getElementById("c-phonetype").value = "CELL";
+        if (waIsOn) toggleWA();
+      }
+
+      // ═══════════════ FILTER ═══════════════
+      function setFilter(f) {
+        activeFilter = f;
+        ["all", "wa", "nowa"].forEach((k) =>
+          document.getElementById("f-" + k).classList.toggle("active", k === f),
+        );
+        renderAdminContacts();
+      }
+
+      // ═══════════════ RENDER ═══════════════
+      function cardHTML(c, i) {
+        const avClass = c.whatsapp ? "av-wa" : AV[i % AV.length];
+        const init = initials(c.first, c.last);
+        const detail = [c.phone, c.org].filter(Boolean).join(" · ");
+        const waBadge = c.whatsapp ? '<span class="wa-badge">💬 WA</span>' : "";
+        const waBtn = c.whatsapp
+          ? `<button class="icon-btn iwa" title="Open WhatsApp" onclick="openWA('${c.phone}')">💬</button>`
+          : "";
+        return `<div class="contact-card ${c.whatsapp ? "wa-card" : ""}">
+    <div class="avatar ${avClass}">${init}</div>
+    <div class="contact-info">
+      <div class="contact-name">${c.first} ${c.last || ""} ${waBadge}</div>
+      <div class="contact-detail">${detail || c.email || "—"}</div>
+    </div>
+    <div class="contact-actions">
+      ${waBtn}
+      <button class="icon-btn" title="Download VCF" onclick="downloadContact(${c.id})">⬇</button>
+      <button class="icon-btn" title="Edit" onclick="openEdit(${c.id})">✎</button>
+      <button class="icon-btn idel" title="Delete" onclick="deleteContact(${c.id})">✕</button>
+    </div>
+  </div>`;
+      }
+      function renderAdminContacts() {
+        const q = (
+          document.getElementById("admin-search").value || ""
+        ).toLowerCase();
+        const f = contacts.filter((c) => {
+          const m = (
+            c.first +
+            " " +
+            (c.last || "") +
+            " " +
+            c.phone +
+            " " +
+            (c.email || "") +
+            " " +
+            (c.org || "")
+          )
+            .toLowerCase()
+            .includes(q);
+          if (activeFilter === "wa") return m && c.whatsapp;
+          if (activeFilter === "nowa") return m && !c.whatsapp;
+          return m;
+        });
+        document.getElementById("admin-contact-list").innerHTML =
+          f.length === 0
+            ? `<div class="empty-state"><div class="big-icon">📭</div><p>${contacts.length === 0 ? "No contacts yet." : "No contacts match filter."}</p></div>`
+            : f.map(cardHTML).join("");
+      }
+      function renderWAContacts() {
+        const q = (
+          document.getElementById("wa-search").value || ""
+        ).toLowerCase();
+        const f = contacts.filter(
+          (c) =>
+            c.whatsapp &&
+            (c.first + " " + (c.last || "") + " " + c.phone)
+              .toLowerCase()
+              .includes(q),
+        );
+        document.getElementById("wa-contact-list").innerHTML =
+          f.length === 0
+            ? `<div class="empty-state"><div class="big-icon">💬</div><p>${contacts.filter((c) => c.whatsapp).length === 0 ? "No WhatsApp contacts. Toggle WhatsApp when adding." : "No matches found."}</p></div>`
+            : f.map(cardHTML).join("");
+      }
+
+      // ═══════════════ CONTACT ACTIONS ═══════════════
+      function downloadContact(id) {
+        const c = contacts.find((x) => x.id === id);
+        if (!c) return;
+        dlVCF(makeVCF(c), c.first + "_" + (c.last || "contact") + ".vcf");
+        toast("✓ VCF downloaded");
+      }
+      function deleteContact(id) {
+        if (!confirm("Delete this contact?")) return;
+        contacts = contacts.filter((c) => c.id !== id);
+        save();
+        renderAdminContacts();
+        renderWAContacts();
+        toast("✓ Contact removed");
+      }
+      function openWA(phone) {
+        window.open("https://wa.me/" + phone.replace(/\D/g, ""), "_blank");
+      }
+      function openEdit(id) {
+        const c = contacts.find((x) => x.id === id);
+        if (!c) return;
+        editingId = id;
+        document.getElementById("e-first").value = c.first || "";
+        document.getElementById("e-last").value = c.last || "";
+        document.getElementById("e-phone").value = c.phone || "";
+        document.getElementById("e-email").value = c.email || "";
+        document.getElementById("e-org").value = c.org || "";
+        editWaIsOn = !!c.whatsapp;
+        document
+          .getElementById("e-wa-switch")
+          .classList.toggle("on", editWaIsOn);
+        document.getElementById("e-wa-row").classList.toggle("on", editWaIsOn);
+        document.getElementById("e-wa-label").textContent = editWaIsOn
+          ? "On WhatsApp"
+          : "Tap to mark as WhatsApp";
+        document.getElementById("edit-modal").classList.add("open");
+      }
+      function saveEdit() {
+        const c = contacts.find((x) => x.id === editingId);
+        if (!c) return;
+        c.first = document.getElementById("e-first").value.trim();
+        c.last = document.getElementById("e-last").value.trim();
+        c.phone = document.getElementById("e-phone").value.trim();
+        c.email = document.getElementById("e-email").value.trim();
+        c.org = document.getElementById("e-org").value.trim();
+        c.whatsapp = editWaIsOn;
+        save();
+        renderAdminContacts();
+        renderWAContacts();
+        closeModal("edit-modal");
+        toast("✓ Contact updated");
+      }
+
+      // ═══════════════ MODALS ═══════════════
+      function closeModal(id) {
+        document.getElementById(id).classList.remove("open");
+      }
+      function openExportModal() {
+        if (!contacts.length) {
+          toast("⚠ No contacts to export");
+          return;
+        }
+        document.getElementById("export-modal").classList.add("open");
+      }
+
+      // ═══════════════ EXPORT / IMPORT ═══════════════
+      function exportAll() {
+        dlVCF(contacts.map(makeVCF).join("\r\n"), "all_contacts.vcf");
+        closeModal("export-modal");
+        toast("✓ Exported " + contacts.length + " contacts");
+      }
+      function exportWAOnly() {
+        const wa = contacts.filter((c) => c.whatsapp);
+        if (!wa.length) {
+          toast("⚠ No WhatsApp contacts");
+          return;
+        }
+        dlVCF(wa.map(makeVCF).join("\r\n"), "whatsapp_contacts.vcf");
+        toast("✓ Exported " + wa.length + " WA contacts");
+      }
+      function exportCSV() {
+        const h = "First Name,Last Name,Phone,Email,Organization,WhatsApp\n";
+        const rows = contacts
+          .map((c) =>
+            [
+              c.first,
+              c.last,
+              c.phone,
+              c.email,
+              c.org,
+              c.whatsapp ? "Yes" : "No",
+            ]
+              .map((x) => `"${(x || "").replace(/"/g, '""')}"`)
+              .join(","),
+          )
+          .join("\n");
+        const blob = new Blob([h + rows], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "contacts.csv";
+        a.click();
+        URL.revokeObjectURL(url);
+        closeModal("export-modal");
+        toast("✓ CSV exported");
+      }
+      function copyAllVCF() {
+        navigator.clipboard
+          .writeText(contacts.map(makeVCF).join("\r\n"))
+          .then(() => {
+            closeModal("export-modal");
+            toast("✓ All vCards copied");
+          });
+      }
+      function exportBackup() {
+        const blob = new Blob([JSON.stringify(contacts, null, 2)], {
+          type: "application/json",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "gmm_vcf_backup.json";
+        a.click();
+        URL.revokeObjectURL(url);
+        toast("✓ Backup downloaded");
+      }
+      function importVCF() {
+        document.getElementById("vcf-file-input").click();
+      }
+      function handleImport(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const text = e.target.result,
+            cards = text.split("BEGIN:VCARD").slice(1);
+          let count = 0;
+          cards.forEach((card) => {
+            const get = (key) => {
+              const m = card.match(new RegExp(key + "[^:]*:([^\r\n]+)"));
+              return m ? m[1].trim() : "";
+            };
+            const fn = get("FN"),
+              n = get("N").split(";");
+            const first = fn ? fn.split(" ")[0] : n[1] || "",
+              last = fn ? fn.split(" ").slice(1).join(" ") : n[0] || "",
+              phone = get("TEL");
+            if (first || phone) {
+              contacts.push({
+                id: Date.now() + count,
+                first,
+                last,
+                phone,
+                email: get("EMAIL"),
+                org: get("ORG"),
+                phonetype: "CELL",
+                whatsapp: false,
+                created: new Date().toISOString(),
+              });
+              count++;
+            }
+          });
+          save();
+          renderAdminContacts();
+          toast("✓ Imported " + count + " contacts");
+          event.target.value = "";
+        };
+        reader.readAsText(file);
+      }
+
+      // ═══════════════ BROADCAST ═══════════════
+      function openWABroadcast() {
+        const wa = contacts.filter((c) => c.whatsapp);
+        document.getElementById("wa-broadcast-text").value = wa.length
+          ? wa.map((c) => c.phone.replace(/\s/g, "")).join("\n")
+          : "No WhatsApp contacts yet.";
+        document.getElementById("wa-modal").classList.add("open");
+      }
+      function copyBroadcast() {
+        navigator.clipboard
+          .writeText(document.getElementById("wa-broadcast-text").value)
+          .then(() => toast("✓ Numbers copied"));
+      }
+
+      // ═══════════════ SETTINGS ═══════════════
+      function changePassword() {
+        const cur = document.getElementById("pwd-current").value,
+          nw = document.getElementById("pwd-new").value,
+          cf = document.getElementById("pwd-confirm").value;
+        if (cur !== getPwd()) {
+          toast("⚠ Current password is wrong");
+          return;
+        }
+        if (nw.length < 4) {
+          toast("⚠ Minimum 4 characters");
+          return;
+        }
+        if (nw !== cf) {
+          toast("⚠ Passwords do not match");
+          return;
+        }
+        localStorage.setItem(ADMIN_KEY, nw);
+        ["pwd-current", "pwd-new", "pwd-confirm"].forEach(
+          (id) => (document.getElementById(id).value = ""),
+        );
+        toast("✓ Password changed");
+      }
+      function clearAllContacts() {
+        if (!confirm("Delete ALL contacts permanently? This cannot be undone."))
+          return;
+        contacts = [];
+        save();
+        renderAdminContacts();
+        renderWAContacts();
+        toast("✓ All contacts deleted");
+      }
+
+      // ═══════════════ TOAST ═══════════════
+      let toastTimer;
+      function toast(msg) {
+        const el = document.getElementById("toast");
+        el.textContent = msg;
+        el.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => el.classList.remove("show"), 2800);
+      }
+
+      // close modals on bg click
+      ["export-modal", "edit-modal", "wa-modal"].forEach((id) => {
+        document.getElementById(id).addEventListener("click", function (e) {
+          if (e.target === this) this.classList.remove("open");
+        });
+      });
+
+      // ═══════════════ INIT ═══════════════
+      if (sessionStorage.getItem(SESSION_KEY) === "1") {
+        showPage("admin");
+        refreshAdmin();
+      } else {
+        showPage("land");
+      }
+      updatePublicCount();
+    </script>
+  </body>
+</html>
